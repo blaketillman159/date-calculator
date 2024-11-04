@@ -253,7 +253,7 @@
             buttonRotate.Image = (Image)resources.GetObject("buttonRotate.Image");
             buttonRotate.Location = new Point(112, 6);
             buttonRotate.Name = "buttonRotate";
-            buttonRotate.Size = new Size(35, 35);
+            buttonRotate.Size = new Size(52, 52);
             buttonRotate.TabIndex = 3;
             buttonRotate.UseVisualStyleBackColor = true;
             buttonRotate.Click += buttonRotate_Click;
@@ -301,16 +301,18 @@
             // 
             // dateTimePicker1
             // 
+            dateTimePicker1.Format = DateTimePickerFormat.Short;
             dateTimePicker1.Location = new Point(6, 6);
             dateTimePicker1.Name = "dateTimePicker1";
-            dateTimePicker1.Size = new Size(200, 23);
+            dateTimePicker1.Size = new Size(100, 23);
             dateTimePicker1.TabIndex = 0;
             // 
             // dateTimePicker2
             // 
+            dateTimePicker2.Format = DateTimePickerFormat.Short;
             dateTimePicker2.Location = new Point(6, 35);
             dateTimePicker2.Name = "dateTimePicker2";
-            dateTimePicker2.Size = new Size(200, 23);
+            dateTimePicker2.Size = new Size(100, 23);
             dateTimePicker2.TabIndex = 1;
             // 
             // buttonDiff
@@ -345,7 +347,9 @@
             Controls.Add(panel2);
             Controls.Add(tabControl1);
             Controls.Add(panel1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
+            MinimumSize = new Size(772, 477);
             Name = "Form1";
             Text = "Dátum Kalkulátor";
             Load += Form1_Load;

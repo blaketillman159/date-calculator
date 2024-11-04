@@ -48,8 +48,8 @@ namespace DateCalculator
                 labelResult.Text = "Hiba, üres mezõ!";
                 return;
             }
-            if (!TimeSpan.TryParseExact(textBoxTime1.Text, new string[] { @"hh\:mm\:ss", @"hh\:mm" }, CultureInfo.InvariantCulture, out var time) ||
-                !TimeSpan.TryParseExact(textBoxTime2.Text, new string[] { @"hh\:mm\:ss", @"hh\:mm" }, CultureInfo.InvariantCulture, out time))
+            if (!TimeSpan.TryParseExact(textBoxTime1.Text, new string[] { @"hh\:mm\:ss", @"hh\:mm", @"h\:m" }, CultureInfo.InvariantCulture, out var time) ||
+                !TimeSpan.TryParseExact(textBoxTime2.Text, new string[] { @"hh\:mm\:ss", @"hh\:mm", @"h\:m" }, CultureInfo.InvariantCulture, out time))
             {
                 labelResult.Text = "Hiba, helytelen formátum!";
                 return;
@@ -60,18 +60,19 @@ namespace DateCalculator
             if (t1 < t2)
             {
                 labelComment.Text = string.Empty;
+                var result = t2 - t1;
+                labelResult.Text = $"{result.Hours} óra, {result.Minutes} perc, {result.Seconds} másodperc\n{result.TotalSeconds} másodperc összesen";
+                labelLog.Text += $"{t2} - {t1} = {result.Hours} óra, {result.Minutes} perc, {result.Seconds} másodperc ({result.TotalSeconds} másodperc összesen)\n";
             }
             else
             {
                 labelComment.Text = "Napon átívelõ!";
-            }
-            //var result = t2 - t1;
-            //labelResult.Text = $"{result.Hours} óra, {result.Minutes} perc, {result.Seconds} másodperc\n{result.TotalSeconds} másodperc összesen";
-            //labelLog.Text += $"{t2} - {t1} = {result.Hours} óra, {result.Minutes} perc, {result.Seconds} másodperc ({result.TotalSeconds} másodperc összesen)\n";
+                var result = t2 + t1;
+                labelResult.Text = $"{result.Days} nap, {result.Hours} óra, {result.Minutes} perc, {result.Seconds} másodperc\n{result.TotalSeconds} másodperc összesen";
+                labelLog.Text += $"{t2} + {t1} = {result.Hours} nap, {result.Hours} óra, {result.Minutes} perc, {result.Seconds} másodperc ({result.TotalSeconds} másodperc összesen)\n";
 
-            var result = t1 - t2;
-            labelResult.Text = $"{result.Hours} óra, {result.Minutes} perc, {result.Seconds} másodperc\n{result.TotalSeconds} másodperc összesen";
-            labelLog.Text += $"{t1} - {t2} = {result.Hours} óra, {result.Minutes} perc, {result.Seconds} másodperc ({result.TotalSeconds} másodperc összesen)\n";
+            }
+
 
         }
 
@@ -172,7 +173,7 @@ namespace DateCalculator
 
         private void textBoxTime1_MouseLeave(object sender, EventArgs e)
         {
-            
+
         }
 
         private void textBoxTime2_Leave(object sender, EventArgs e)
@@ -181,26 +182,48 @@ namespace DateCalculator
             textBoxTime2.Text = FormatTime(textBoxTime2.Text);
         }
 
-        private string FormatTime(string time)
+        private string FormatTime(string rawTime)
         {
-            if (time.Length > 2)
+            if (rawTime.Contains(":"))
             {
-                time = time.Replace(":", "");
-            }            
-            if (time.Length == 4 && !time.Contains(":"))
-            {
-                time = time.Insert(2, ":");
+                return rawTime;
             }
-            if (time.Length > 5 && time.Count(x => x == ':') < 2)
+            rawTime = rawTime.PadLeft(4, '0');
+
+            int length = rawTime.Length;
+
+            if (length <= 2)
             {
-                time = time.Insert(2, ":").Insert(5, ":");
+                return $"0:{rawTime.PadLeft(2, '0')}";
             }
-            return time;
+            else if (length <= 4)
+            {
+                string minutes = rawTime.Substring(0, length - 2);
+                string seconds = rawTime.Substring(length - 2);
+                return $"{minutes}:{seconds}";
+            }
+            else
+            {
+                string hours = rawTime.Substring(0, length - 4);
+                string minutes = rawTime.Substring(length - 4, 2);
+                string seconds = rawTime.Substring(length - 2);
+                return $"{hours}:{minutes}:{seconds}";
+            }
         }
 
         private void textBoxTime1_Leave(object sender, EventArgs e)
         {
             textBoxTime1.Text = FormatTime(textBoxTime1.Text);
+        }
+
+        private void buttonTimePicker1_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void buttonTimePicker2_Click(object sender, EventArgs e)
+        {
+            
         }
     }
 }
