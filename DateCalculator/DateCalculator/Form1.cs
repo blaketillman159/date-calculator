@@ -57,19 +57,20 @@ namespace DateCalculator
 
             TimeSpan t1 = TimeSpan.Parse(textBoxTime1.Text, CultureInfo.InvariantCulture);
             TimeSpan t2 = TimeSpan.Parse(textBoxTime2.Text, CultureInfo.InvariantCulture);
-            if (t1 < t2)
+            var result = t2 - t1;
+            if (result.TotalMicroseconds < 0)
             {
-                labelComment.Text = string.Empty;
-                var result = t2 - t1;
+                var aDay = new TimeSpan(1, 0, 0, 0);
+                result = aDay + result;
+                labelComment.Text = "Napon átívelõ!";
                 labelResult.Text = $"{result.Hours} óra, {result.Minutes} perc, {result.Seconds} másodperc\n{result.TotalSeconds} másodperc összesen";
                 labelLog.Text += $"{t2} - {t1} = {result.Hours} óra, {result.Minutes} perc, {result.Seconds} másodperc ({result.TotalSeconds} másodperc összesen)\n";
             }
             else
             {
-                labelComment.Text = "Napon átívelõ!";
-                var result = t2 + t1;
-                labelResult.Text = $"{result.Days} nap, {result.Hours} óra, {result.Minutes} perc, {result.Seconds} másodperc\n{result.TotalSeconds} másodperc összesen";
-                labelLog.Text += $"{t2} + {t1} = {result.Hours} nap, {result.Hours} óra, {result.Minutes} perc, {result.Seconds} másodperc ({result.TotalSeconds} másodperc összesen)\n";
+                labelComment.Text = string.Empty;
+                labelResult.Text = $"{result.Hours} óra, {result.Minutes} perc, {result.Seconds} másodperc\n{result.TotalSeconds} másodperc összesen";
+                labelLog.Text += $"{t2} + {t1} = {result.Hours} óra, {result.Minutes} perc, {result.Seconds} másodperc ({result.TotalSeconds} másodperc összesen)\n";
 
             }
 
